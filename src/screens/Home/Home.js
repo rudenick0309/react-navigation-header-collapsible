@@ -20,33 +20,32 @@ import {TabBar} from 'react-native-tab-view';
 
 // first component 에서 flatList에 넣을 가짜 데이터
 
-
 // 헤더를 각 컴포넌트 별로 할당하기 위해 만든 MySearchBar
-const MySearchBar = () => (
-  <View
-    style={{
-      padding: 15,
-      width: '100%',
-      backgroundColor: 'blue',
-      height: 60,
-      // zIndex: 999,
-    }}>
-    <TextInput placeholder="search here" />
-  </View>
-);
+// const MySearchBar = () => (
+//   <View
+//     style={{
+//       padding: 15,
+//       width: '100%',
+//       backgroundColor: 'blue',
+//       height: 60,
+//       // zIndex: 999,
+//     }}>
+//     <TextInput placeholder="search here" />
+//   </View>
+// );
 
 // HomeScreen 컴포넌트 안에서, 탭뷰로 선언 될 FirstRoute
 const FirstRoute = ({}) => {
-  const {
-    onScroll /* Event handler */,
-    onScrollWithListener /* Event handler creator */,
-    containerPaddingTop /* number */,
-    scrollIndicatorInsetTop /* number */,
-    /* Animated.AnimatedInterpolation by scrolling */
-    translateY /* 0.0 ~ -headerHeight */,
-    progress /* 0.0 ~ 1.0 */,
-    opacity /* 1.0 ~ 0.0 */,
-  } = useCollapsibleHeader();
+  // const {
+  //   onScroll /* Event handler */,
+  //   onScrollWithListener /* Event handler creator */,
+  //   containerPaddingTop /* number */,
+  //   scrollIndicatorInsetTop /* number */,
+  //   /* Animated.AnimatedInterpolation by scrolling */
+  //   translateY /* 0.0 ~ -headerHeight */,
+  //   progress /* 0.0 ~ 1.0 */,
+  //   opacity /* 1.0 ~ 0.0 */,
+  // } = useCollapsibleHeader();
 
   const Item = ({title}) => (
     <View style={styles.item}>
@@ -59,9 +58,9 @@ const FirstRoute = ({}) => {
   return (
     <View style={{flex: 1, backgroundColor: '#ff4081'}}>
       <Animated.FlatList
-        onScroll={onScroll}
-        contentContainerStyle={{paddingTop: containerPaddingTop}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        // onScroll={onScroll}
+        // contentContainerStyle={{paddingTop: containerPaddingTop}}
+        // scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         data={DATA}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}

@@ -3,16 +3,16 @@ import {View, Text, FlatList, Animated, StyleSheet} from 'react-native';
 import {FAKEDATA} from '../../fakeData';
 import {useCollapsibleHeader} from 'react-navigation-collapsible';
 export const FirstRoute = ({}) => {
-  const {
-    onScroll /* Event handler */,
-    onScrollWithListener /* Event handler creator */,
-    containerPaddingTop /* number */,
-    scrollIndicatorInsetTop /* number */,
-    /* Animated.AnimatedInterpolation by scrolling */
-    translateY /* 0.0 ~ -headerHeight */,
-    progress /* 0.0 ~ 1.0 */,
-    opacity /* 1.0 ~ 0.0 */,
-  } = useCollapsibleHeader();
+  // const {
+  //   onScroll /* Event handler */,
+  //   onScrollWithListener /* Event handler creator */,
+  //   containerPaddingTop /* number */,
+  //   scrollIndicatorInsetTop /* number */,
+  //   /* Animated.AnimatedInterpolation by scrolling */
+  //   translateY /* 0.0 ~ -headerHeight */,
+  //   progress /* 0.0 ~ 1.0 */,
+  //   opacity /* 1.0 ~ 0.0 */,
+  // } = useCollapsibleHeader();
 
   const Item = ({title}) => (
     <View style={styles.item}>
@@ -25,12 +25,12 @@ export const FirstRoute = ({}) => {
   return (
     <>
       {/* <Text>test</Text> */}
-      <View style={{flex: 1, backgroundColor: '#ff4081'}}>
+      <View style={{flex: 1, backgroundColor: 'skyblue'}}>
         <Animated.FlatList
           // <FlatList
-          onScroll={onScroll}
+          // onScroll={onScroll}
           //   contentContainerStyle={{paddingTop: containerPaddingTop}}
-          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          // scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           data={FAKEDATA}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
