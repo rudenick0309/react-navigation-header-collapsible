@@ -35,7 +35,8 @@ import {TabBar} from 'react-native-tab-view';
 // );
 
 // HomeScreen 컴포넌트 안에서, 탭뷰로 선언 될 FirstRoute
-const FirstRoute = ({}) => {
+const FirstRoute = ({params}) => {
+  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = params;
   // const {
   //   onScroll /* Event handler */,
   //   onScrollWithListener /* Event handler creator */,
@@ -53,17 +54,18 @@ const FirstRoute = ({}) => {
     </View>
   );
 
-  const renderItem = ({item}) => <Item title={item.title} />;
+  const renderItem = ({item}) => <Item title={item} />;
 
+  const DATA = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
     <View style={{flex: 1, backgroundColor: '#ff4081'}}>
       <Animated.FlatList
-        // onScroll={onScroll}
-        // contentContainerStyle={{paddingTop: containerPaddingTop}}
-        // scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        onScroll={onScroll}
+        contentContainerStyle={{paddingTop: containerPaddingTop}}
+        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         data={DATA}
+        keyExtractor={(item) => `item-${item}`}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
       />
     </View>
   );
@@ -92,11 +94,32 @@ function HomeScreen() {
   //   />
   // );
 
+  const options = {
+    config: {
+      collapsedColor: 'white',
+      useNativeDriver: true,
+      elevation: 4,
+    },
+  };
+  const {
+    onScroll,
+    containerPaddingTop,
+    scrollIndicatorInsetTop,
+  } = useCollapsibleHeader(options);
+
   // 각 컴포넌트에 프랍스를 전달하기 위한 renderScene
   const renderScene = ({route}) => {
     switch (route.key) {
       case 'first':
-        return <FirstRoute />;
+        return (
+          <FirstRoute
+            params={{
+              onScroll,
+              containerPaddingTop,
+              scrollIndicatorInsetTop,
+            }}
+          />
+        );
       case 'second':
         return <SecondRoute />;
       default:
@@ -107,6 +130,7 @@ function HomeScreen() {
   return (
     <>
       <TabView
+        style={{marginTop: containerPaddingTop}}
         navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}

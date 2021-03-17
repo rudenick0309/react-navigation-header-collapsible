@@ -12,7 +12,7 @@ export default function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeTopTab}
+        component={HomeScreen}
         options={
           Platform.OS === 'ios'
             ? {headerTitle: () => <MySearchBar />}
