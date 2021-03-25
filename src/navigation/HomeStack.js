@@ -13,14 +13,14 @@ export default function HomeStackScreen() {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={
-          Platform.OS === 'ios'
-            ? {headerTitle: () => <MySearchBar />}
-            : {
-                header: () => <MySearchBar />,
-              }
-        }
-        // options={{headerShown: false}}
+        // options={
+        //   Platform.OS === 'ios'
+        //     ? {headerTitle: () => <MySearchBar />}
+        //     : {
+        //         header: () => <MySearchBar />,
+        //       }
+        // }
+        options={{headerShown: false}}
       />
       {/* <HomeStack.Screen name="Details" component={DetailsScreen} /> */}
     </HomeStack.Navigator>
