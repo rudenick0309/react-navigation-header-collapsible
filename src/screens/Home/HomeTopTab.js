@@ -17,13 +17,22 @@ import {
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {FirstRoute} from '../Swipe/componentOne';
 import {SecondRoute} from '../Swipe/componentTwo';
+import {Platform} from 'react-native';
+import {MySearchBar} from '../../header';
 
 const Tab = createMaterialTopTabNavigator();
 
 // FirestRoute 와 SecondRoute 를 탭뷰로 감싸 줄 컴포넌트
 function HomeTopTab() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      options={
+        Platform.OS === 'ios'
+          ? {headerTitle: () => <MySearchBar />}
+          : {
+              header: () => <MySearchBar />,
+            }
+      }>
       <Tab.Screen name="Home" component={FirstRoute} />
       <Tab.Screen name="Settings" component={SecondRoute} />
     </Tab.Navigator>
