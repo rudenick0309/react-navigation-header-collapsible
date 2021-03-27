@@ -1,159 +1,132 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
-  View,
-  Text,
   Animated,
-  useWindowDimensions,
+  Dimensions,
+  Platform,
+  Text,
+  View,
   FlatList,
-  TextInput,
-  StatusBar,
-  StyleSheet,
 } from 'react-native';
 import {
-  useCollapsibleHeader,
-  useCollapsibleSubHeader,
-  CollapsibleSubHeaderAnimator,
-} from 'react-navigation-collapsible';
+  Body,
+  Header,
+  List,
+  ListItem as Item,
+  ScrollableTab,
+  Tab,
+  Tabs,
+  Title,
+} from 'native-base';
+import {MySearchBar} from '../../header';
 
-import {TabView, SceneMap} from 'react-native-tab-view';
-import {TabBar} from 'react-native-tab-view';
-
-// first component 에서 flatList에 넣을 가짜 데이터
-
-// 헤더를 각 컴포넌트 별로 할당하기 위해 만든 MySearchBar
-// const MySearchBar = () => (
-//   <View
-//     style={{
-//       padding: 15,
-//       width: '100%',
-//       backgroundColor: 'blue',
-//       height: 60,
-//       // zIndex: 999,
-//     }}>
-//     <TextInput placeholder="search here" />
-//   </View>
-// );
-
-// HomeScreen 컴포넌트 안에서, 탭뷰로 선언 될 FirstRoute
-const FirstRoute = ({params}) => {
-  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = params;
-  // const {
-  //   onScroll /* Event handler */,
-  //   onScrollWithListener /* Event handler creator */,
-  //   containerPaddingTop /* number */,
-  //   scrollIndicatorInsetTop /* number */,
-  //   /* Animated.AnimatedInterpolation by scrolling */
-  //   translateY /* 0.0 ~ -headerHeight */,
-  //   progress /* 0.0 ~ 1.0 */,
-  //   opacity /* 1.0 ~ 0.0 */,
-  // } = useCollapsibleHeader();
-
-  const Item = ({title}) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
-
-  const renderItem = ({item}) => <Item title={item} />;
-
-  const DATA = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  return (
-    <View style={{flex: 1, backgroundColor: '#ff4081'}}>
-      <Animated.FlatList
-        onScroll={onScroll}
-        contentContainerStyle={{paddingTop: containerPaddingTop}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-        data={DATA}
-        keyExtractor={(item) => `item-${item}`}
-        renderItem={renderItem}
-      />
-    </View>
-  );
+const NAVBAR_HEIGHT = 60; // 얘가 헤더랑 탭의 높이네, 2개의 분리된게 아니라 1개네
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const COLOR = 'rgb(45,181,102)';
+const TAB_PROPS = {
+  tabStyle: {width: SCREEN_WIDTH / 2, backgroundColor: COLOR},
+  activeTabStyle: {width: SCREEN_WIDTH / 2, backgroundColor: COLOR},
+  textStyle: {color: 'white'},
+  activeTextStyle: {color: 'white'},
 };
 
-// HomeScreen에서 탭뷰 안에 사용될 컴포넌트, 하지만 SecondRoute 에는 별 다른 flatList를 구현하지 않음.
-const SecondRoute = () => (
-  <View style={{flex: 1, backgroundColor: '#673ab7'}} />
-);
+export default class HomeScreen extends Component {
+  scroll = new Animated.Value(0);
+  headerY;
 
-// FirestRoute 와 SecondRoute 를 탭뷰로 감싸 줄 컴포넌트
-function HomeScreen() {
-  const layout = useWindowDimensions();
+  constructor(props) {
+    super(props);
+    this.headerY = Animated.multiply(
+      Animated.diffClamp(this.scroll, 0, NAVBAR_HEIGHT),
+      -1,
+    );
+  }
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'first', title: 'First'},
-    {key: 'second', title: 'Second'},
-  ]);
-
-  // const renderTabBar = (props) => (
-  //   <TabBar
-  //     {...props}
-  //     indicatorStyle={{backgroundColor: 'white', height: 100}}
-  //     style={{backgroundColor: 'yellow', height: 100, paddingTop: 116}}
-  //   />
-  // );
-
-  const options = {
-    config: {
-      collapsedColor: 'white',
-      useNativeDriver: true,
-      elevation: 4,
-    },
-  };
-  const {
-    onScroll,
-    containerPaddingTop,
-    scrollIndicatorInsetTop,
-  } = useCollapsibleHeader(options);
-
-  // 각 컴포넌트에 프랍스를 전달하기 위한 renderScene
-  const renderScene = ({route}) => {
-    switch (route.key) {
-      case 'first':
-        return (
-          <FirstRoute
-            params={{
-              onScroll,
-              containerPaddingTop,
-              scrollIndicatorInsetTop,
+  render() {
+    const tabContent = (
+      <List>
+        {new Array(210).fill(null).map((_, i) => (
+          <Item key={i}>
+            <Text>Item {i}</Text>
+          </Item>
+        ))}
+      </List>
+    );
+    const tabY = Animated.add(this.scroll, this.headerY);
+    return (
+      <View>
+        {Platform.OS === 'ios' && (
+          <View
+            style={{
+              backgroundColor: 'red',
+              height: 20,
+              width: '100%',
+              position: 'absolute',
+              zIndex: 2,
             }}
           />
-        );
-      case 'second':
-        return <SecondRoute />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <>
-      <TabView
-        style={{marginTop: containerPaddingTop}}
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
-      />
-    </>
-  );
+        )}
+        <Animated.View
+          style={{
+            width: '100%',
+            position: 'absolute',
+            transform: [
+              {
+                translateY: this.headerY,
+              },
+            ],
+            elevation: 0,
+            flex: 1,
+            zIndex: 1,
+            backgroundColor: COLOR,
+          }}>
+          {/* <Header style={{backgroundColor: 'transparent'}} hasTabs>
+            <Body>
+              <Title>
+                <Text style={{color: 'white'}}>Collapsing Navbar</Text>
+              </Title>
+            </Body>
+          </Header> */}
+          <MySearchBar></MySearchBar>
+        </Animated.View>
+        <Animated.FlatList
+          // scrollEventThrottle={1}
+          bounces={false}
+          // showsVerticalScrollIndicator={false}
+          style={{zIndex: 0, height: '100%', elevation: -1}}
+          contentContainerStyle={{paddingTop: NAVBAR_HEIGHT}}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: this.scroll}}}],
+            {useNativeDriver: true},
+          )}
+          // overScrollMode="never"
+          >
+          <Tabs
+            renderTabBar={(props) => (
+              <Animated.View
+                style={[
+                  {
+                    transform: [{translateY: tabY}],
+                    zIndex: 1,
+                    width: '100%',
+                    backgroundColor: COLOR,
+                  },
+                  Platform.OS === 'ios' ? {paddingTop: 20} : null,
+                ]}>
+                <ScrollableTab
+                  {...props}
+                  underlineStyle={{backgroundColor: 'white'}}
+                />
+              </Animated.View>
+            )}>
+            <Tab heading="Tab 1" {...TAB_PROPS}>
+              {tabContent}
+            </Tab>
+            <Tab heading="Tab 2" {...TAB_PROPS}>
+              {tabContent}
+            </Tab>
+          </Tabs>
+        </Animated.FlatList>
+      </View>
+    );
+  }
 }
-
-export default HomeScreen;
-
-// flatList 안의 개별 데이터를 꾸며주기 위한 속성들
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    height: 100,
-    opacity: 0.2,
-  },
-  title: {},
-});
